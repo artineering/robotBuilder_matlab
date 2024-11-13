@@ -8,7 +8,6 @@ classdef Link < urdf.URDFTag
         function obj = Link(name)
             obj@urdf.URDFTag('link', name);
             obj.visual = urdf.Visual();
-            obj.addChild(obj.visual);
         end
 
         function addVisualComponent(obj, element)
@@ -17,6 +16,14 @@ classdef Link < urdf.URDFTag
 
         function setOrigin(obj, roll, pitch, yaw, x, y, z)
             obj.visual.setOrigin(roll, pitch, yaw, x, y, z);
+        end
+
+        function outputArg = serialize(obj)
+            if isConfigured(obj.children)
+                obj.children = remove(obj.children, keys(obj.children));
+            end
+            obj.addChild(obj.visual);
+            outputArg = serialize@urdf.URDFTag(obj);
         end
     end
 

@@ -10,8 +10,6 @@ classdef Visual < urdf.URDFTag
             obj@urdf.URDFTag('visual');
             obj.geometry = urdf.Geometry();
             obj.origin = urdf.Origin();
-            obj.addChild(obj.geometry);
-            obj.addChild(obj.origin);
         end
 
         function addVisualComponent(obj, element)
@@ -24,6 +22,15 @@ classdef Visual < urdf.URDFTag
 
         function setOriginObj(obj, origin)
             obj.origin = origin;
+        end
+
+        function outputArg = serialize(obj)
+            if isConfigured(obj.children)
+                obj.children = remove(obj.children, keys(obj.children));
+            end
+            obj.addChild(obj.geometry);
+            obj.addChild(obj.origin);
+            outputArg = serialize@urdf.URDFTag(obj);
         end
     end
 
