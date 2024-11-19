@@ -25,9 +25,7 @@ classdef Visual < urdf.URDFTag
         end
 
         function outputArg = serialize(obj)
-            if isConfigured(obj.children)
-                obj.children = remove(obj.children, keys(obj.children));
-            end
+            obj.clearChildren();
             obj.addChild(obj.geometry);
             obj.addChild(obj.origin);
             outputArg = serialize@urdf.URDFTag(obj);

@@ -75,7 +75,7 @@ classdef URDFTag < handle
             % was added earlier.
             foundChild = obj.findChild(child.type, child.name);
             if ~isempty(foundChild)
-                error('There is already a child with the same name and type.');
+                error(sprintf('There is already a child of type %s and name %s', child.type, child.name));
             else
                 obj.children(child.getName()) = {child};
             end
@@ -88,27 +88,34 @@ classdef URDFTag < handle
             end
 
             childType = type;
+            isUnNamed = true;
             childName = '';
             if nargin == 3
                 childName = name;
+            else
+                isUnNamed = false;
+            end
+
+            if ~isUnNamed
+                childKeys = keys(obj.children);
+                for index = 1:numel(childKeys)
+                    currentChild = obj.children(childKeys(index));
+                    currentChild = currentChild{1};
+                    if strcmp(currentChild.type, childType) && ~currentChild.useName
+                        childName = currentChild.name;
+                        break;
+                    end
+                end
             end
 
             if ~isempty(childName) && obj.children.isKey(childName)
                 child = obj.children(childName);
-            else
-                childKeys = keys(obj.children);
-                for index = 1:numel(childKeys)
-                    child = obj.children(childKeys(index));
-                    child = child{1};
-                    if strcmp(child.type, childType)
-                        childName = child.name;
-                        break;
-                    end
-                end
-                child = obj.children(childName);
             end
-            if ~isempty(child)
-                child = child{1};
+        end
+
+        function clearChildren(obj)
+            if isConfigured(obj.children)
+                obj.children = remove(obj.children, obj.children.keys);
             end
         end
         
