@@ -73,19 +73,6 @@ classdef Joint < urdf.URDFTag
                 obj.addChild(origin);
             end
         end
-
-        function setLimits(obj, lower, upper)
-            obj.addAttribute('lower', num2str(lower));
-            obj.addAttribute('upper', num2str(upper));
-        end
-
-        function setEffort(obj, effort)
-            obj.addAttribute('effort', num2str(effort));
-        end
-
-        function setVelocity(obj, velocity)
-            obj.addAttribute('velocity', num2str(velocity));
-        end
     end
 
     methods(Static)

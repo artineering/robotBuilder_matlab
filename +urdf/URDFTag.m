@@ -5,11 +5,16 @@ classdef URDFTag < handle
     %   override specific functionality as needed.
     
     properties
+        name
         type
         parent
         children
         attributes
         tabs
+    end
+
+    properties(Access = protected)
+        useName = true
     end
     
     methods
@@ -21,21 +26,22 @@ classdef URDFTag < handle
 
             obj.attributes = dictionary;
             if exist('name','var')
+                obj.name = name;
                 obj.attributes('name') = name;
+            else
+                [~, randStr] = fileparts(tempname);
+                obj.name = strcat(obj.type, '_', randStr);
+                obj.useName = false;
             end
             obj.tabs = 0;
             obj.children = dictionary;
         end
 
         function name = getName(obj)
-            if isConfigured(obj.attributes) && isKey(obj.attributes, 'name')
+            if obj.useName
                 name = obj.attributes('name');
-                if isa(name, "java.lang.String")
-                    name = string(name);
-                end
             else
-                [~, randStr] = fileparts(tempname);
-                name = strcat(obj.type, '_', randStr);
+                name = obj.name;
             end
         end
  
@@ -64,7 +70,46 @@ classdef URDFTag < handle
 
         function addChild(obj, child)
             child.addParent(obj);
-            obj.children(child.getName()) = {child};
+
+            % Check for duplicates and throw an error if the child already
+            % was added earlier.
+            foundChild = obj.findChild(child.type, child.name);
+            if ~isempty(foundChild)
+                error('There is already a child with the same name and type.');
+            else
+                obj.children(child.getName()) = {child};
+            end
+        end
+
+        function child = findChild(obj, type, name)
+            child = {};
+            if ~isConfigured(obj.children)
+                return;
+            end
+
+            childType = type;
+            childName = '';
+            if nargin == 3
+                childName = name;
+            end
+
+            if ~isempty(childName) && obj.children.isKey(childName)
+                child = obj.children(childName);
+            else
+                childKeys = keys(obj.children);
+                for index = 1:numel(childKeys)
+                    child = obj.children(childKeys(index));
+                    child = child{1};
+                    if strcmp(child.type, childType)
+                        childName = child.name;
+                        break;
+                    end
+                end
+                child = obj.children(childName);
+            end
+            if ~isempty(child)
+                child = child{1};
+            end
         end
         
         function outputArg = serialize(obj)

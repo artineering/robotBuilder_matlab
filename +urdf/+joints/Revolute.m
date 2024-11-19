@@ -3,7 +3,7 @@ classdef Revolute < urdf.Joint
     % properties such as lower, upper, effort and velocity.
     
     methods
-        function obj = Revolute(name, parentLink, childLink, lower, upper, effort, velocity)
+        function obj = Revolute(name, parentLink, childLink, lower, upper, effort, velocity, axis)
             obj@urdf.Joint(name, 'revolute', parentLink, childLink);
 
             limit = urdf.URDFTag('limit');
@@ -13,6 +13,34 @@ classdef Revolute < urdf.Joint
             limit.addAttribute('velocity', num2str(velocity));
 
             obj.addChild(limit);
+
+            if nargin == 8
+                axisTag = urdf.Axis(axis(1), axis(2), axis(3));
+                obj.addChild(axisTag);
+            end
+        end
+
+        function setLimits(obj, lower, upper)
+            obj.addAttribute('lower', num2str(lower));
+            obj.addAttribute('upper', num2str(upper));
+        end
+
+        function setEffort(obj, effort)
+            obj.addAttribute('effort', num2str(effort));
+        end
+
+        function setVelocity(obj, velocity)
+            obj.addAttribute('velocity', num2str(velocity));
+        end
+
+        function setAxis(obj, axis)
+            foundChild = obj.findChild('axis');
+            if isempty(foundChild)
+                axisTag = urdf.Axis(axis(1), axis(2), axis(3));
+                obj.addChild(axisTag);
+            else
+                obj.children(foundChild.name)
+            end
         end
     end
 
