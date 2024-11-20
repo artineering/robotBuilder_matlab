@@ -79,14 +79,27 @@ classdef Joint < urdf.URDFTag
         function obj = buildFromURDF(node)
             type = char(node.getAttribute('type'));
             obj = [];
-            if strcmp(type, 'revolute')
-                obj = urdf.joints.Revolute.buildFromURDF(node);
+            switch(type)
+                case 'revolute'
+                    obj = urdf.joints.Revolute.buildFromURDF(node);
+                case 'prismatic'
+                    obj = urdf.joints.Prismatic.buildFromURDF(node);
+                case 'planar'
+                    obj = urdf.joints.Planar.buildFromURDF(node);
+                case 'floating'
+                    obj = urdf.joints.Floating.buildFromURDF(node);
+                case 'fixed'
+                    obj = urdf.joints.Fixed.buildFromURDF(node);
+                case 'continuous'
+                    obj = urdf.joints.Continuous.buildFromURDF(node);
             end
-            for i = 0:(node.getLength()-1)
-                child = node.item(i);
-                if strcmp(char(child.getNodeName()), 'origin')
-                    obj.setOriginObj(urdf.Origin.buildFromURDF(child));
-                end    
+            if ~isempty(obj)
+                for i = 0:(node.getLength()-1)
+                    child = node.item(i);
+                    if strcmp(char(child.getNodeName()), 'origin')
+                        obj.setOriginObj(urdf.Origin.buildFromURDF(child));
+                    end    
+                end
             end
         end
     end

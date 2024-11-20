@@ -10,8 +10,8 @@ classdef Robot < urdf.URDFTag
     methods
         function obj = Robot(name)
             obj@urdf.URDFTag('robot', name);
-            obj.links = dictionary;
-            obj.joints = dictionary;
+            obj.links = containers.Map('KeyType', 'char', 'ValueType', 'any');
+            obj.joints = containers.Map('KeyType', 'char', 'ValueType', 'any');
         end
         
         function addLink(obj, link)
@@ -46,20 +46,20 @@ classdef Robot < urdf.URDFTag
         end
 
         function outputArg = serialize(obj)
-            linkEntries = entries(obj.links, "struct");
-            jointEntries = entries(obj.joints, "struct");
+            linkEntries = values(obj.links);
+            jointEntries = values(obj.joints);
 
             if isConfigured(obj.children)
                 obj.children = remove(obj.children, keys(obj.children));
             end
 
             for index = 1:numel(linkEntries)
-                link = linkEntries(index).Value;
+                link = linkEntries{index};
                 obj.addChild(link);
             end
 
             for index = 1:numel(jointEntries)
-                joint = jointEntries(index).Value;
+                joint = jointEntries{index};
                 obj.addChild(joint);
             end
             outputArg = serialize@urdf.URDFTag(obj);

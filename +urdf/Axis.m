@@ -9,5 +9,15 @@ classdef Axis < urdf.URDFTag
             obj.attributes('xyz') = sprintf('%s %s %s', x, y, z);
         end
     end
+
+    methods(Static)
+        function obj = buildFromURDF(node)
+            xyz = node.getAttribute('xyz');
+            xyz_s = xyz.split(' ');
+            obj = urdf.Axis(str2double(xyz_s(1)),...
+                str2double(xyz_s(2)),...
+                str2double(xyz_s(3)));
+        end
+    end
 end
 

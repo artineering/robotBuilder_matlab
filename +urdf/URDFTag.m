@@ -35,6 +35,7 @@ classdef URDFTag < handle
             end
             obj.tabs = 0;
             obj.children = dictionary;
+            
         end
 
         function name = getName(obj)
@@ -42,6 +43,9 @@ classdef URDFTag < handle
                 name = obj.attributes('name');
             else
                 name = obj.name;
+            end
+            if isa(name, 'java.lang.String')
+                name = string(name);
             end
         end
  
@@ -158,6 +162,13 @@ classdef URDFTag < handle
             else
                 outputArg = sprintf('%s/>', outputArg);
             end
+        end
+
+        function h = keyHash(obj)
+            h = keyHash(class(obj));
+        end
+        function tf = keyMatch(objA,objB)
+            tf = keyMatch(class(objA), class(objB));
         end
     end
 end

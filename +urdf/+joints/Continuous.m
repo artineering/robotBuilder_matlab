@@ -1,4 +1,4 @@
-classdef Continuous
+classdef Continuous < urdf.Joint
     %CONTINUOUS Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -7,16 +7,26 @@ classdef Continuous
     end
     
     methods
-        function obj = Continuous(inputArg1,inputArg2)
-            %CONTINUOUS Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
+        function obj = Continuous(name, parentLink,childLink)
+            obj@urdf.Joint(name, 'continuous', parentLink, childLink);
         end
-        
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+    end
+
+    methods(Static)
+        function obj = buildFromURDF(node)
+            name = char(node.getAttribute('name'));
+            parentName = '';
+            childName = '';
+            for i = 0:(node.getLength()-1)
+                child = node.item(i);
+                switch char(child.getNodeName())
+                    case 'parent'
+                        parentName = char(child.getAttribute('link'));
+                    case 'child'
+                        childName = char(child.getAttribute('link'));
+                end
+            end
+            obj = urdf.joints.Continuous(name, parentName, childName);
         end
     end
 end
