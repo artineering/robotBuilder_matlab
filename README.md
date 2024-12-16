@@ -126,7 +126,7 @@ Before getting started with robotBuilder_matlab, ensure your runtime environment
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/[username]/robotBuilder_matlab.git
+git clone https://github.com/artineering/robotBuilder_matlab.git
 ```
 
 2. Add the project directory to your MATLAB path:
