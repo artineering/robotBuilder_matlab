@@ -1,7 +1,7 @@
 <div align="left" style="position: relative;">
-<h1>ROBOTBUILDER_MATLAB</h1>
+<h1>MATLAB URDF Builder</h1>
 <p align="left">
-	MATLAB tool for building Robot URDF files.
+	A MATLAB toolkit for programmatically creating, modifying, and managing URDF (Unified Robot Description Format) files. This library provides an object-oriented interface for robot model construction and manipulation.
 </p>
 <p align="left">
 	<img src="https://img.shields.io/github/license/artineering/robotBuilder_matlab?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
@@ -20,30 +20,48 @@
 ##  Table of Contents
 
 - [ Overview](#-overview)
-- [ Features](#-features)
 - [ Project Structure](#-project-structure)
-  - [ Project Index](#-project-index)
 - [ Getting Started](#-getting-started)
   - [ Prerequisites](#-prerequisites)
   - [ Installation](#-installation)
   - [ Usage](#-usage)
-  - [ Testing](#-testing)
-- [ Project Roadmap](#-project-roadmap)
 - [ Contributing](#-contributing)
 - [ License](#-license)
-- [ Acknowledgments](#-acknowledgments)
 
 ---
 
 ##  Overview
 
-<code>❯ REPLACE-ME</code>
+- **Complete URDF Element Support**
+  - Links and Joints (Continuous, Fixed, Floating, Planar, Prismatic, Revolute)
+  - Visual and Geometric Components (Box, Cylinder, Sphere, Mesh)
+  - Origins and Transformations
+  - Materials and Properties
 
----
+- **Object-Oriented Design**
+  - Clean class hierarchy with `URDFTag` as base class
+  - Modular component structure
+  - Extensible architecture
 
-##  Features
+- **Comprehensive Joint Types**
+  - Continuous joints for unlimited rotation
+  - Fixed joints for rigid connections
+  - Floating joints for unconstrained motion
+  - Planar joints for 2D movement
+  - Prismatic joints for linear motion
+  - Revolute joints with configurable limits
 
-<code>❯ REPLACE-ME</code>
+- **Advanced Geometry Support**
+  - Basic shapes (Box, Cylinder, Sphere)
+  - Mesh import capabilities
+  - Visual component management
+  - Origin and transformation handling
+
+- **XML Processing**
+  - Read existing URDF files
+  - Write URDF files
+  - Compare URDF structures
+  - Validate URDF syntax
 
 ---
 
@@ -84,154 +102,14 @@
     └── minion.mlx
 ```
 
+## Key Classes
 
-###  Project Index
-<details open>
-	<summary><b><code>ROBOTBUILDER_MATLAB/</code></b></summary>
-	<details> <!-- __root__ Submodule -->
-		<summary><b>__root__</b></summary>
-		<blockquote>
-			<table>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/minion.mlx'>minion.mlx</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/RobotBuilder_matlab.prj'>RobotBuilder_matlab.prj</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			</table>
-		</blockquote>
-	</details>
-	<details> <!-- +urdf Submodule -->
-		<summary><b>+urdf</b></summary>
-		<blockquote>
-			<table>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Robot.m'>Robot.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Inertial.m'>Inertial.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Link.m'>Link.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/URDFTag.m'>URDFTag.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Origin.m'>Origin.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Visual.m'>Visual.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Geometry.m'>Geometry.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Axis.m'>Axis.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Builder.m'>Builder.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Component.m'>Component.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Material.m'>Material.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			<tr>
-				<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/Joint.m'>Joint.m</a></b></td>
-				<td><code>❯ REPLACE-ME</code></td>
-			</tr>
-			</table>
-			<details>
-				<summary><b>+util</b></summary>
-				<blockquote>
-					<table>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+util/writeToURDFFile.m'>writeToURDFFile.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+util/readXML.m'>readXML.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+util/compareURDF.m'>compareURDF.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					</table>
-				</blockquote>
-			</details>
-			<details>
-				<summary><b>+shapes</b></summary>
-				<blockquote>
-					<table>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+shapes/Box.m'>Box.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+shapes/Mesh.m'>Mesh.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+shapes/Sphere.m'>Sphere.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+shapes/Cylinder.m'>Cylinder.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					</table>
-				</blockquote>
-			</details>
-			<details>
-				<summary><b>+joints</b></summary>
-				<blockquote>
-					<table>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+joints/Continuous.m'>Continuous.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+joints/Revolute.m'>Revolute.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+joints/Prismatic.m'>Prismatic.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+joints/Planar.m'>Planar.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+joints/Fixed.m'>Fixed.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					<tr>
-						<td><b><a href='https://github.com/artineering/robotBuilder_matlab/blob/master/+urdf/+joints/Floating.m'>Floating.m</a></b></td>
-						<td><code>❯ REPLACE-ME</code></td>
-					</tr>
-					</table>
-				</blockquote>
-			</details>
-		</blockquote>
-	</details>
-</details>
+- **Robot**: Main container class for the URDF model
+- **Link**: Represents physical elements of the robot
+- **Joint**: Base class for all joint types
+- **URDFTag**: Base class providing XML functionality
+- **Geometry**: Handles visual representation
+- **Origin**: Manages spatial transformations
 
 ---
 ##  Getting Started
@@ -240,45 +118,50 @@
 
 Before getting started with robotBuilder_matlab, ensure your runtime environment meets the following requirements:
 
-- **Programming Language:** ObjectiveC
+- **Programming Language:** MATLAB
+- **Tools:** MATLAB, Simulink, SimScape (Version R2023b and Above)
 
 
 ###  Installation
 
-Install robotBuilder_matlab using one of the following methods:
-
-**Build from source:**
-
-1. Clone the robotBuilder_matlab repository:
-```sh
-❯ git clone https://github.com/artineering/robotBuilder_matlab
+1. Clone the repository:
+```bash
+git clone https://github.com/[username]/robotBuilder_matlab.git
 ```
 
-2. Navigate to the project directory:
-```sh
-❯ cd robotBuilder_matlab
+2. Add the project directory to your MATLAB path:
+```matlab
+addpath('/path/to/robotBuilder_matlab');
 ```
-
-3. Install the project dependencies:
-
-echo 'INSERT-INSTALL-COMMAND-HERE'
 
 
 
 ###  Usage
-Run robotBuilder_matlab using the following command:
-echo 'INSERT-RUN-COMMAND-HERE'
+### Creating a Simple Robot
 
-###  Testing
-Run the test suite using the following command:
-echo 'INSERT-TEST-COMMAND-HERE'
+```matlab
+% Initialize a new robot
+robot = urdf.Robot('my_robot');
 
----
-##  Project Roadmap
+% Add a base link
+base_link = urdf.Link('base_link');
+robot.addLink(base_link);
 
-- [X] **`Task 1`**: <strike>Implement feature one.</strike>
-- [ ] **`Task 2`**: Implement feature two.
-- [ ] **`Task 3`**: Implement feature three.
+% Add a joint
+joint = urdf.joints.Revolute('joint1', 'base_link', 'link1', -pi/2, pi/2, 100, 1);
+robot.addJoint(joint);
+
+% Write to file
+urdf.util.writeToURDFFile(robot, 'my_robot.urdf');
+```
+
+### Loading Existing URDF
+
+```matlab
+% Read from file
+robot_node = urdf.util.readXML('existing_robot.urdf');
+robot = urdf.Robot.buildFromURDF(robot_node);
+```
 
 ---
 
@@ -327,12 +210,18 @@ echo 'INSERT-TEST-COMMAND-HERE'
 
 ##  License
 
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
+This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
 
 ---
 
-##  Acknowledgments
+## Citing
 
-- List any resources, contributors, inspiration, etc. here.
-
----
+If you use this software in your research, please cite:
+```
+@software{robotbuilder_matlab,
+  title={MATLAB URDF Builder},
+  author={Siddharth Vaghela},
+  year={2024},
+  url={https://github.com/artineering/robotBuilder_matlab}
+}
+```
