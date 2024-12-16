@@ -119,7 +119,7 @@
 Before getting started with robotBuilder_matlab, ensure your runtime environment meets the following requirements:
 
 - **Programming Language:** MATLAB
-- **Tools:** MATLAB, Simulink, SimScape (Version R2023b and Above)
+- **Tools:** MATLAB (Version R2023b and Above)
 
 
 ###  Installation
