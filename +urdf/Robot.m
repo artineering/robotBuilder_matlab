@@ -46,13 +46,23 @@ classdef Robot < urdf.URDFTag
         end
 
         function outputArg = serialize(obj)
-            linkEntries = values(obj.links);
-            jointEntries = values(obj.joints);
+            obj.resetChildren();
+            obj.populateChildren();
+            outputArg = serialize@urdf.URDFTag(obj);
+        end
+    end
 
+    methods(Access = private)
+        function resetChildren(obj)
             if isConfigured(obj.children)
                 obj.children = remove(obj.children, keys(obj.children));
             end
+        end
 
+        function populateChildren(obj)
+            linkEntries = values(obj.links);
+            jointEntries = values(obj.joints);
+            
             for index = 1:numel(linkEntries)
                 link = linkEntries{index};
                 obj.addChild(link);
@@ -62,7 +72,6 @@ classdef Robot < urdf.URDFTag
                 joint = jointEntries{index};
                 obj.addChild(joint);
             end
-            outputArg = serialize@urdf.URDFTag(obj);
         end
     end
 

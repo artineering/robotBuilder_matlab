@@ -20,22 +20,27 @@ classdef URDFTag < handle
     methods
         function obj = URDFTag(type, name)
             %URDFTAG Construct an instance of this class
+
+            % If a type is specified, assign it to the object and create
+            % the containers. If type is not specified, treat it as a null
+            % tag.
             if exist('type', 'var')
                 obj.type = type;
-            end
+                obj.attributes = dictionary;
+                obj.children = dictionary;
 
-            obj.attributes = dictionary;
-            if exist('name','var')
-                obj.name = name;
-                obj.attributes('name') = name;
+                if exist('name','var')
+                    obj.name = name;
+                    obj.attributes('name') = name;
+                else
+                    [~, randStr] = fileparts(tempname);
+                    obj.name = strcat(obj.type, '_', randStr);
+                    obj.useName = false;
+                end
+                obj.tabs = 0;
             else
-                [~, randStr] = fileparts(tempname);
-                obj.name = strcat(obj.type, '_', randStr);
-                obj.useName = false;
-            end
-            obj.tabs = 0;
-            obj.children = dictionary;
-            
+                obj.type = 'NULL';
+            end  
         end
 
         function name = getName(obj)
@@ -59,6 +64,13 @@ classdef URDFTag < handle
             end
         end
 
+        function flag = hasAttribute(obj, attrName)
+            flag = false;
+            if ~urdf.util.isNullTag(obj) && isConfigured(obj.attributes)
+                flag = isKey(obj.attributes, attrName);
+            end
+        end
+
         function addParent(obj, parent)
             obj.parent = parent;
             obj.tabs = parent.tabs + 1;
@@ -78,7 +90,7 @@ classdef URDFTag < handle
             % Check for duplicates and throw an error if the child already
             % was added earlier.
             foundChild = obj.findChild(child.type, child.name);
-            if ~isempty(foundChild)
+            if ~urdf.util.isNullTag(foundChild)
                 error(sprintf('There is already a child of type %s and name %s', child.type, child.name));
             else
                 obj.children(child.getName()) = {child};
@@ -86,7 +98,7 @@ classdef URDFTag < handle
         end
 
         function child = findChild(obj, type, name)
-            child = {};
+            child = urdf.URDFTag;
             if ~isConfigured(obj.children)
                 return;
             end
