@@ -37,6 +37,7 @@
   - Visual and Geometric Components (Box, Cylinder, Sphere, Mesh)
   - Origins and Transformations
   - Materials and Properties
+  - Reusable Component assemblies
 
 - **Object-Oriented Design**
   - Clean class hierarchy with `URDFTag` as base class
@@ -51,11 +52,16 @@
   - Prismatic joints for linear motion
   - Revolute joints with configurable limits
 
-- **Advanced Geometry Support**
+- **Comprehensive Geometry Support**
   - Basic shapes (Box, Cylinder, Sphere)
   - Mesh import capabilities
   - Visual component management
   - Origin and transformation handling
+
+- **Reusable Component Assembly Support**
+  - Create reusable component assemblies with links and joints
+  - Define and attach parameters to component assemblies
+  - Create unique component instances with their own set of parameter values
 
 - **XML Processing**
   - Read existing URDF files
@@ -83,6 +89,8 @@
     │   │   ├── Mesh.m
     │   │   └── Sphere.m
     │   ├── +util
+    │   │   ├── isNullTag.m
+    │   │   ├── findNodeFromRobotRoot.m
     │   │   ├── compareURDF.m
     │   │   ├── readXML.m
     │   │   └── writeToURDFFile.m
@@ -105,6 +113,7 @@
 ## Key Classes
 
 - **Robot**: Main container class for the URDF model
+- **Component**: Reusable component class for component assemblies
 - **Link**: Represents physical elements of the robot
 - **Joint**: Base class for all joint types
 - **URDFTag**: Base class providing XML functionality
