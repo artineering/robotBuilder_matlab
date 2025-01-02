@@ -10,6 +10,13 @@ classdef Link < urdf.URDFTag
             obj.visual = urdf.Visual();
         end
 
+        function addChild(obj, child)
+            if isa(child, "urdf.Link")
+                error("Link cannot be nested inside another Link");
+            end
+            addChild@urdf.URDFTag(obj, child);
+        end
+
         function addVisualComponent(obj, element)
             obj.visual.addVisualComponent(element);
         end
