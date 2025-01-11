@@ -87,6 +87,19 @@ classdef Component < handle
         function outputArg = serialize(obj)
             outputArg = obj.shadowTag.serialize();
         end
+
+        function robot = createInstance(obj, robot, instanceName, parameters)
+            % Validate instance does not clash with existing nodes in the
+            % robot structure
+
+            % Validate parameters
+
+            % Get all nodes from the component
+            % For each node
+            %   Apply parameters to the node if applicable
+            %   Apply instance name prefix
+            %   Insert modified node into robot
+        end
     end
 end
 
