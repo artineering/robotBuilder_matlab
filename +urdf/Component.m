@@ -66,7 +66,7 @@ classdef Component < handle
                 error(['Parameter ' paramName ' is not defined for ' obj.name]);
             end
             % Verify if the targetPath is a valid node in the shadow robot.
-            node = urdf.util.findNodeFromRobotRoot(obj.shadowTag, targetPath);
+            node = urdf.util.findNodeFromRobotRoot(obj.shadowTag, [convertStringsToChars(obj.shadowTag.getName()) '.' targetPath]);
             if urdf.util.isNullTag(node)
                 error(['No child with path ' targetPath ' found in ' obj.name]);
             end
@@ -78,10 +78,42 @@ classdef Component < handle
 
             % Add the target node and property to the parameter reference
             % list.
-            paramRef = struct('node', node,...
+            paramRef = struct('targetPath', targetPath,...
                 'propertyName', propertyName,...
                 'paramName', paramName);
             obj.parameterRefs = insert(obj.parameterRefs, paramName, paramRef);
+        end
+
+        function instanceRobot = applyParametersToInstance(obj, instanceRobot, parameters)
+            if ~isempty(parameters) && ~isConfigured(obj.parameters)
+                error(['No parameters were configured for ' obj.name]);
+            end
+            for i = 1:numel(parameters)
+                param = parameters(i);
+                if isempty(fieldnames(lookup(obj.parameters, param.paramName, "FallbackValue", struct)))
+                    error(['Parameter ' param.paramName ' is not defined for ' obj.name]);
+                end
+                if isConfigured(obj.parameterRefs)
+                    if isempty(fieldnames(lookup(obj.parameterRefs, param.paramName, "FallbackValue", struct)))
+                        error(['No mapping was provided for ' param.paramName]);
+                    else
+                        paramRef = obj.parameterRefs(param.paramName);
+                        node = urdf.util.findNodeFromRobotRoot(instanceRobot,...
+                            [convertStringsToChars(instanceRobot.getName()) '.' paramRef.targetPath]);
+                        if urdf.util.isNullTag(node)
+                            error(['No child with path ' targetPath ' found in ' obj.name]);
+                        end
+                        % Verify if the property name is valid for the target node
+                        % found.
+                        if ~node.hasAttribute(paramRef.propertyName)
+                            error(['No property with name ' paramRef.propertyName ' found in ' node.getName()]);
+                        end
+                        node.addAttribute(paramRef.propertyName, paramRef.value);
+                    end
+                else
+                    error(['Parameter references not created for ' obj.name]);
+                end
+            end
         end
 
         function outputArg = serialize(obj)
@@ -89,16 +121,30 @@ classdef Component < handle
         end
 
         function robot = createInstance(obj, robot, instanceName, parameters)
-            % Validate instance does not clash with existing nodes in the
-            % robot structure
+            % Check if instance name already exists in robot
+            searchPattern = ['^' regexptranslate('escape', instanceName) '.*'];
+            options = struct('regularExpression', true);
+            existingNodes = urdf.util.findNodesByPattern(robot, searchPattern, options);
+            
+            if ~isempty(existingNodes)
+                error('URDF:Component:DuplicateInstance', ...
+                      'Robot already contains nodes with prefix "%s"', instanceName);
+            end
 
             % Validate parameters
 
-            % Get all nodes from the component
-            % For each node
-            %   Apply parameters to the node if applicable
-            %   Apply instance name prefix
-            %   Insert modified node into robot
+
+            % Create instance copy of the shadow robot.
+            instanceRobot = obj.shadowTag.clone();
+            
+            % Apply the parameters to the instanceRobot children.
+            parameterizedRobot = obj.applyParametersToInstance(instanceRobot, parameters);
+                        
+            % Apply the instance name prefix to all the children
+            parameterizedRobot.addPrefixToChildren(instanceName);
+
+            % Merge the parameterized robot nodes with the robot.
+            robot.merge(parameterizedRobot);
         end
     end
 end
