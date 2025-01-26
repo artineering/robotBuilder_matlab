@@ -30,6 +30,9 @@ classdef URDFTag < handle
                 obj.children = dictionary;
 
                 if exist('name','var')
+                    if isa(name, 'java.lang.String')
+                        name = string(name);
+                    end
                     obj.name = name;
                     obj.attributes('name') = name;
                 else
@@ -48,9 +51,6 @@ classdef URDFTag < handle
                 name = obj.attributes('name');
             else
                 name = obj.name;
-            end
-            if isa(name, 'java.lang.String')
-                name = string(name);
             end
         end
  
