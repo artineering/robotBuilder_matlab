@@ -98,6 +98,7 @@
     │   ├── Builder.m
     │   ├── Component.m
     │   ├── Geometry.m
+    │   ├── Collision.m
     │   ├── Inertial.m
     │   ├── Joint.m
     │   ├── Link.m
@@ -116,9 +117,11 @@
 - **Component**: Reusable component class for component assemblies
 - **Link**: Represents physical elements of the robot
 - **Joint**: Base class for all joint types
-- **URDFTag**: Base class providing XML functionality
+- **Visual**: Adds a visual element to a link
+- **Collision**: Adds a collision element to a link
 - **Geometry**: Handles visual representation
 - **Origin**: Manages spatial transformations
+- **URDFTag**: Base class providing XML functionality
 
 ---
 ##  Getting Started
