@@ -70,7 +70,7 @@ classdef Robot < urdf.URDFTag
                 for i = 1:numel(linkKeys)
                     link = obj.getLink(linkKeys{i});
                     oldName = link.getName();
-                    newName = [prefix '_' oldName];
+                    newName = strcat(prefix, "_", oldName);
                     
                     % Store name mapping for joint reference updates
                     nameMap(oldName) = newName;
@@ -94,7 +94,7 @@ classdef Robot < urdf.URDFTag
                 for i = 1:numel(jointKeys)
                     joint = obj.getJoint(jointKeys{i});
                     oldName = joint.getName();
-                    newName = [prefix oldName];
+                    newName = strcat(prefix, "_", oldName);
                     
                     % Update joint name
                     if joint.useName
@@ -104,7 +104,7 @@ classdef Robot < urdf.URDFTag
                     end
                     
                     % Update parent link reference
-                    if isConfigured(joint.parentLink) && joint.parentLink.isKey('link')
+                    if isa(joint.parentLink, 'urdf.URDFTag') && joint.parentLink.hasAttribute('link')
                         parentName = joint.parentLink.attributes('link');
                         if nameMap.isKey(parentName)
                             joint.parentLink.attributes('link') = nameMap(parentName);
@@ -112,7 +112,7 @@ classdef Robot < urdf.URDFTag
                     end
                     
                     % Update child link reference
-                    if isConfigured(joint.child) && joint.child.isKey('link')
+                    if isa(joint.child, 'urdf.URDFTag') && joint.child.hasAttribute('link')
                         childName = joint.child.attributes('link');
                         if nameMap.isKey(childName)
                             joint.child.attributes('link') = nameMap(childName);
@@ -160,6 +160,35 @@ classdef Robot < urdf.URDFTag
                     case 'joint'
                         obj.addJoint(urdf.Joint.buildFromURDF(child));
                 end
+            end
+        end
+
+        function success = applyParameterValue(obj, path, value)
+            % Apply parameter value to specified path in robot
+            try
+                pathParts = strsplit(path, '.');
+                node = obj;
+
+                % Since the first part of the path has to be a named
+                % element, we can search for it first.
+                node = node.findChild('urdf.URDFTag',pathParts{1});
+                if isa(node, 'cell')
+                    node = node{1};
+                end
+                
+                % Navigate path
+                for i = 2:length(pathParts)-1
+                    temp = node.findChild(pathParts{i});
+                    if isa(temp, 'cell')
+                        node = temp{1};
+                    end
+                end
+                
+                % Set value
+                node.addAttribute(pathParts{end}, value);
+                success = true;
+            catch
+                success = false;
             end
         end
     end
