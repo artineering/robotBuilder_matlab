@@ -172,6 +172,55 @@ robot_node = urdf.util.readXML('existing_robot.urdf');
 robot = urdf.Robot.buildFromURDF(robot_node);
 ```
 
+### Reusing components
+
+```matlab
+% Create main robot instance
+robot = urdf.Robot('test_robot');
+
+% Create arm component
+arm = urdf.Component('arm');
+base = urdf.Link('base');
+upperArm = urdf.Link('upper_arm');
+forearm = urdf.Link('forearm');
+
+% Add geometry with parameterized dimensions
+cylinderBase = urdf.shapes.Cylinder(0,0);
+base.addVisual(cylinderBase);
+
+% Add joints with parameterized properties
+shoulder = urdf.joints.Revolute('shoulder', 'base', 'upper_arm', ...
+    -pi/2, pi/2, 0,0);
+elbow = urdf.joints.Revolute('elbow', 'upper_arm', 'forearm', ...
+    -pi/2, pi/2, 0,0);
+
+% Add components to arm
+arm.addLink(base);
+arm.addLink(upperArm);
+arm.addLink(forearm);
+arm.addJoint(shoulder);
+arm.addJoint(elbow);
+
+% Define the parameters
+arm.addParameter('radius', 2, 'base.visual.geometry.cylinder.radius');
+arm.addParameter('length', 2, 'base.visual.geometry.cylinder.length');
+
+% Add left arm instance to the robot
+left_params = struct;
+left_params.radius = 5;
+left_params.length = 10;
+robot = arm.createInstance(robot, 'left_arm', left_params);
+
+% Add right arm instance to the robot
+right_params = struct;
+right_params.radius = 5;
+right_params.length = 10;
+robot = arm.createInstance(robot, 'right_arm', right_params);
+
+% View the robot urdf structure
+robot.serialize
+```
+
 ---
 
 ##  Contributing
