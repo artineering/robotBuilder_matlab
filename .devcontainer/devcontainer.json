@@ -1,0 +1,9 @@
+{
+    "image": "ubuntu:latest",
+    "features": {
+        "ghcr.io/mathworks/devcontainer-features/matlab:0": {
+            "release": "r2024b",
+            "products": "MATLAB Simulink Simscape Robotics_toolbox"
+        }
+    }
+}
