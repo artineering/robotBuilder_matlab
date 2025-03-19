@@ -1,19 +1,35 @@
 {
-    "image": "ubuntu:latest",
-    "features": {
-        "ghcr.io/mathworks/devcontainer-features/matlab:0": {
-            "release": "r2024b",
-            "products": "MATLAB Simulink Simscape Robotics_toolbox",
-            "installMatlabProxy": "true"
-        }
-    },
-    "portsAttributes": {
-        "8888": {
-        "label": "MATLAB",
-        "onAutoForward": "openPreview"
-        }
-    },
-    "containerEnv": {
+  /* This DevContainer configuration file demonstrates
+      1. Using the mathworks/matlab image on Dockerhub 
+      2. Installation of MATLAB Integration for Jupyter & JupyterLab  
+      3. Configuration of VSCode environment for following modes of access:
+          a. MATLAB in a Browser
+          b. Directly from VSCode, using the MATLAB extension for VSCode
+          c. Using Jupyter Notebooks in VSCode
+          d. Start Codespace in Jupyter
+  See: https://hub.docker.com/r/mathworks/matlab for available images.
+  */
+  "name": "Built using MathWorks Docker Hub Image",
+  "image": "mathworks/matlab:latest",
+  "onCreateCommand": {
+    "install-dependencies": "sudo apt-get update && sudo apt-get install --no-install-recommends -y git xvfb"
+  },
+  "updateContentCommand": {
+    // dockerhub containers from R2023a onwards use PIPX to install matlab-proxy
+    // For older releases use the "using-matlab-dockerfile" configuration
+    "install-mifj-and-jupyterlab": "pipx upgrade matlab-proxy && pipx inject --include-apps --include-deps matlab-proxy jupyter-matlab-proxy jupyterlab"
+  },
+  "waitFor": "updateContentCommand",
+  "postStartCommand": {
+    "start-matlab-desktop": "run.sh -browser"
+  },
+  "portsAttributes": {
+    "8888": {
+      "label": "MATLAB",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "containerEnv": {
     "MWI_APP_PORT": "8888",
     "MWI_ENABLE_TOKEN_AUTH": "False",
     // Configure MATLAB's startup folder
@@ -32,16 +48,16 @@
       ],
       "settings": {
         "MATLAB.signIn": true,
+        // Adds MATLAB's PIPX environments to Python indexer
+        "python.venvPath": "/home/matlab/.local/pipx/venvs/",
         // Marks MATLAB Kernel as a trusted source
         "jupyter.kernels.trusted": [
-          "/usr/share/jupyter/kernels/jupyter_matlab_kernel/kernel.json"
+          "/home/matlab/.local/pipx/venvs/matlab-proxy/share/jupyter/kernels/jupyter_matlab_kernel/kernel.json"
         ]
       }
     }
   },
   "hostRequirements": {
     "cpus": 4
-  },
-  // Need to specify a user to use the startInDesktop feature.
-  "containerUser": "vscode"
+  }
 }
