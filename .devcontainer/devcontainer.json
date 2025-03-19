@@ -3,7 +3,45 @@
     "features": {
         "ghcr.io/mathworks/devcontainer-features/matlab:0": {
             "release": "r2024b",
-            "products": "MATLAB Simulink Simscape Robotics_toolbox"
+            "products": "MATLAB Simulink Simscape Robotics_toolbox",
+            "installMatlabProxy": "true"
         }
+    },
+    "portsAttributes": {
+        "8888": {
+        "label": "MATLAB",
+        "onAutoForward": "openPreview"
+        }
+    },
+    "containerEnv": {
+    "MWI_APP_PORT": "8888",
+    "MWI_ENABLE_TOKEN_AUTH": "False",
+    // Configure MATLAB's startup folder
+    "MATLAB_USERWORKDIR": "${containerWorkspaceFolder}",
+    "MATLAB_USE_USERWORK": "1",
+    // Enable embedding the desktop into VSCode's Simple Browser
+    "MWI_CUSTOM_HTTP_HEADERS": "{\"Content-Security-Policy\": \"frame-ancestors *\"}"
+  },
+  // Configure VSCode Extensions
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "MathWorks.language-matlab",
+        "ms-toolsai.jupyter",
+        "ms-python.python"
+      ],
+      "settings": {
+        "MATLAB.signIn": true,
+        // Marks MATLAB Kernel as a trusted source
+        "jupyter.kernels.trusted": [
+          "/usr/share/jupyter/kernels/jupyter_matlab_kernel/kernel.json"
+        ]
+      }
     }
+  },
+  "hostRequirements": {
+    "cpus": 4
+  },
+  // Need to specify a user to use the startInDesktop feature.
+  "containerUser": "vscode"
 }

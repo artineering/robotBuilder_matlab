@@ -6,72 +6,56 @@ classdef Joint < urdf.URDFTag
         jointType
         origin
         parentLink
-        child
+        childLink
     end
     
     methods
-        function obj = Joint(name, jointType, parentName, childName, origin)
+        function obj = Joint(name, jointType, parentName, childName, elements)
+            arguments (Input)
+                % Required properties
+                name        (1,1) string
+                jointType   (1,1) string
+                parentName  (1,1) string
+                childName   (1,1) string
+
+                % Optional elements - sub-classes to enforce elements as required.
+                elements.origin (1,1) struct = struct('roll', 0, 'pitch', 0, 'yaw', 0, 'x', 0, 'y', 0, 'z', 0)
+                elements.axis (1,3) = [1, 0, 1]
+                elements.calibration (1,1) struct = struct('rising', [], 'falling', [])
+                elements.dynamics (1,1) struct = struct('damping', 0, 'friction', 0)
+                elements.limit (1,1) struct = struct('lower', 0, 'upper', 0, 'effort', 0, 'velocity', 0)
+                elements.safety_controller (1,1) struct = struct('soft_lower_limit', 0, 'soft_upper_limit', 0, 'k_position', 0, 'k_velocity', 0)
+                elements.mimic (1,1) struct = struct('joint', '', 'multiplier', 0, 'offset', 0)
+            end
+
+            % Construct the urdftag.
             obj@urdf.URDFTag('joint', name);
+
+            % Set the joint type.
             obj.addAttribute('type', jointType);
+
+            % Configure the parent and child links.
             obj.parentLink = urdf.URDFTag('parent');
-            if exist("parentName", 'var')
-                obj.parentLink.addAttribute('link', parentName);
-            end
-
-            obj.child = urdf.URDFTag('child');
-            if exist("childName", "var")
-                obj.child.addAttribute('link', childName);
-            end
-
-            if exist("origin", "var")
-                obj.origin = origin;
-            else
-                obj.origin = urdf.Origin();
-            end
-
+            obj.parentLink.addAttribute('link', parentName);
             obj.addChild(obj.parentLink);
-            obj.addChild(obj.child);
-            obj.addChild(obj.origin);
+            obj.childLink = urdf.URDFTag('child');
+            obj.childLink.addAttribute('link', childName);
+            obj.addChild(obj.childLink);
+
+            % Add the joint elements.
+            obj.addElements(elements)
         end
 
-        function addParentLink(obj, parentName)
+        function updateParentLink(obj, parentName)
             obj.parentLink.addAttribute('link', parentName);
         end
 
-        function addChildLink(obj, childName)
-            obj.child.addAttribute('link', childName)
+        function updateChildLink(obj, childName)
+            obj.childLink.addAttribute('link', childName)
         end
 
-        function setOrigin(obj, roll, pitch, yaw, x, y, z)
-            found = false;
-            if numEntries(obj.children) > 0
-                childKeys = keys(obj.children);
-                for index = 1:numel(childKeys)
-                    if isa(obj.children(childKeys(index)), 'urdf.Origin')
-                        found = true;
-                        obj.children(childKeys(index)).reset(roll, pitch, yaw, x, y, z);
-                    end
-                end
-            end
-            if ~found
-                obj.addChild(urdf.Origin(roll, pitch, yaw, x, y, z));
-            end
-        end
+        function addElements(elements)
 
-        function setOriginObj(obj, origin)
-            found = false;
-            if numEntries(obj.children) > 0
-                childKeys = keys(obj.children);
-                for index = 1:numel(childKeys)
-                    if isa(obj.children(childKeys(index)), 'urdf.Origin')
-                        found = true;
-                        obj.children(childKeys(index)) = origin;
-                    end
-                end
-            end
-            if ~found
-                obj.addChild(origin);
-            end
         end
     end
 
